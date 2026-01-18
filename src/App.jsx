@@ -9,17 +9,9 @@ function SolanaTokenTracker() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("$Troll");
   const [activeTab, setActiveTab] = useState("overview");
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(function() {
     loadTokens();
-    const handleMouseMove = function(e) {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return function() {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
   }, []);
 
   const loadTokens = async function() {
@@ -57,9 +49,9 @@ function SolanaTokenTracker() {
         { name: "$PEPE", mentions: 15234, sentiment: 68, growth: -5.2 }
       ],
       alerts: [
-        { id: 1, type: "viral", severity: "high", title: "Viral Potential", message: "Tweet velocity +340% in last hour", time: "12m" },
-        { id: 2, type: "whale", severity: "medium", title: "Whale Activity", message: "Top 10 holder active on X", time: "1h" },
-        { id: 3, type: "influencer", severity: "high", title: "New Influencer", message: "@CryptoKing (1.2M) first mention", time: "3h" }
+        { id: 1, severity: "high", title: "Viral Potential", message: "Tweet velocity +340% in last hour", time: "12m" },
+        { id: 2, severity: "medium", title: "Whale Activity", message: "Top 10 holder active on X", time: "1h" },
+        { id: 3, severity: "high", title: "New Influencer", message: "@CryptoKing (1.2M) first mention", time: "3h" }
       ],
       totalPosts: 8432,
       postsPerHour: 127,
@@ -68,7 +60,6 @@ function SolanaTokenTracker() {
       totalReplies: 12456,
       totalRetweets: 34521,
       uniqueAuthors: 4821,
-      repeatPosters: 3247,
       loyaltyIndex: 87.3,
       botPercentage: 8.2,
       organicGrowth: 92.1,
@@ -81,13 +72,10 @@ function SolanaTokenTracker() {
   };
 
   const generateMindshareData = function() {
-    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    return days.map(function(day) {
+    return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(function(day) {
       return {
         day: day,
-        posts: Math.floor(Math.random() * 1500) + 800,
-        likes: Math.floor(Math.random() * 25000) + 15000,
-        views: Math.floor(Math.random() * 500000) + 300000
+        posts: Math.floor(Math.random() * 1500) + 800
       };
     });
   };
@@ -95,10 +83,7 @@ function SolanaTokenTracker() {
   const generateHourlyData = function() {
     const hours = [];
     for (let i = 0; i < 24; i++) {
-      hours.push({
-        hour: i + ":00",
-        posts: Math.floor(Math.random() * 200) + 50
-      });
+      hours.push({ hour: i + ":00", posts: Math.floor(Math.random() * 200) + 50 });
     }
     return hours;
   };
@@ -144,121 +129,192 @@ function SolanaTokenTracker() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-cyan-900 text-white overflow-hidden relative">
-      <div className="fixed inset-0 bg-black opacity-40 pointer-events-none"></div>
-      
-      <div className="relative z-10 max-w-7xl mx-auto p-4 md:p-6">
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl md:text-4xl font-black mb-2 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+    <div style={{
+      minHeight: "100vh",
+      background: "linear-gradient(to bottom right, #581c87, #000000, #164e63)",
+      color: "white",
+      overflow: "hidden",
+      position: "relative"
+    }}>
+      <div style={{ position: "relative", zIndex: 10, maxWidth: "80rem", margin: "0 auto", padding: "1.5rem" }}>
+        <div style={{ marginBottom: "1.5rem", textAlign: "center" }}>
+          <h1 style={{
+            fontSize: "2.25rem",
+            fontWeight: "900",
+            marginBottom: "0.5rem",
+            background: "linear-gradient(to right, #c084fc, #f472b6, #22d3ee)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text"
+          }}>
             SOLANA MINDSHARE TRACKER
           </h1>
-          <p className="text-sm md:text-base text-cyan-300 font-semibold flex items-center justify-center gap-2">
+          <p style={{ color: "#67e8f9", fontWeight: "600", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
             <Zap size={16} />
             Advanced X Analytics • Community Intelligence • Viral Detection
           </p>
         </div>
 
-        <div className="mb-4 flex gap-3">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-400" size={18} />
+        <div style={{ marginBottom: "1rem", display: "flex", gap: "0.75rem" }}>
+          <div style={{ flex: 1, position: "relative" }}>
+            <Search style={{ position: "absolute", left: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "#c084fc" }} size={18} />
             <input
               type="text"
               placeholder="Search tokens..."
               value={searchTerm}
               onChange={function(e) { setSearchTerm(e.target.value); }}
-              className="w-full pl-10 pr-3 py-2 bg-purple-900 bg-opacity-40 border-2 border-purple-500 border-opacity-30 rounded-xl focus:outline-none focus:border-purple-500 text-white placeholder-gray-400"
+              style={{
+                width: "100%",
+                paddingLeft: "2.5rem",
+                paddingRight: "0.75rem",
+                paddingTop: "0.5rem",
+                paddingBottom: "0.5rem",
+                background: "rgba(88, 28, 135, 0.4)",
+                border: "2px solid rgba(168, 85, 247, 0.3)",
+                borderRadius: "0.75rem",
+                outline: "none",
+                color: "white"
+              }}
             />
           </div>
           <button
             onClick={function() { setShowAddForm(!showAddForm); }}
-            className="px-4 md:px-5 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 rounded-xl font-bold flex items-center gap-2 transition-all"
+            style={{
+              padding: "0.5rem 1.25rem",
+              background: "linear-gradient(to right, #10b981, #059669)",
+              borderRadius: "0.75rem",
+              fontWeight: "700",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              border: "none",
+              cursor: "pointer",
+              color: "white"
+            }}
           >
             <Plus size={18} />
-            <span className="hidden md:inline">ADD</span>
+            ADD
           </button>
         </div>
 
         {showAddForm && (
-          <div className="mb-4 p-4 bg-purple-900 bg-opacity-40 border-2 border-purple-500 border-opacity-30 rounded-xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+          <div style={{
+            marginBottom: "1rem",
+            padding: "1rem",
+            background: "rgba(88, 28, 135, 0.4)",
+            border: "2px solid rgba(168, 85, 247, 0.3)",
+            borderRadius: "1rem"
+          }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "0.75rem", marginBottom: "0.75rem" }}>
               <input
                 type="text"
                 placeholder="Name (e.g., $PUMP)"
                 value={newToken.name}
                 onChange={function(e) { setNewToken(Object.assign({}, newToken, { name: e.target.value })); }}
-                className="px-3 py-2 bg-black bg-opacity-50 border-2 border-purple-500 border-opacity-30 rounded-lg focus:outline-none focus:border-purple-500 text-white placeholder-gray-400"
+                style={{
+                  padding: "0.5rem 0.75rem",
+                  background: "rgba(0, 0, 0, 0.5)",
+                  border: "2px solid rgba(168, 85, 247, 0.3)",
+                  borderRadius: "0.5rem",
+                  outline: "none",
+                  color: "white"
+                }}
               />
               <input
                 type="text"
                 placeholder="Contract Address"
                 value={newToken.address}
                 onChange={function(e) { setNewToken(Object.assign({}, newToken, { address: e.target.value })); }}
-                className="px-3 py-2 bg-black bg-opacity-50 border-2 border-cyan-500 border-opacity-30 rounded-lg focus:outline-none focus:border-cyan-500 text-white placeholder-gray-400"
+                style={{
+                  padding: "0.5rem 0.75rem",
+                  background: "rgba(0, 0, 0, 0.5)",
+                  border: "2px solid rgba(6, 182, 212, 0.3)",
+                  borderRadius: "0.5rem",
+                  outline: "none",
+                  color: "white"
+                }}
               />
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={addToken}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg font-bold"
-              >
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <button onClick={addToken} style={{ padding: "0.5rem 1rem", background: "#7c3aed", borderRadius: "0.5rem", fontWeight: "700", border: "none", cursor: "pointer", color: "white" }}>
                 Add
               </button>
-              <button
-                onClick={function() { setShowAddForm(false); }}
-                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg font-bold"
-              >
+              <button onClick={function() { setShowAddForm(false); }} style={{ padding: "0.5rem 1rem", background: "#374151", borderRadius: "0.5rem", fontWeight: "700", border: "none", cursor: "pointer", color: "white" }}>
                 Cancel
               </button>
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
           {filteredTokens.map(function(token) {
             return (
               <div
                 key={token.id}
                 onClick={function() { setSelectedToken(token); }}
-                className="p-4 bg-gradient-to-br from-purple-900 to-purple-800 bg-opacity-50 border-2 border-purple-500 border-opacity-20 hover:border-purple-500 hover:border-opacity-60 rounded-xl cursor-pointer transition-all"
+                style={{
+                  padding: "1rem",
+                  background: "linear-gradient(to bottom right, rgba(88, 28, 135, 0.5), rgba(107, 33, 168, 0.5))",
+                  border: "2px solid rgba(168, 85, 247, 0.2)",
+                  borderRadius: "1rem",
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
               >
-                <div className="flex justify-between mb-2">
-                  <h3 className="text-xl font-black bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                  <h3 style={{
+                    fontSize: "1.25rem",
+                    fontWeight: "900",
+                    background: "linear-gradient(to right, #d8b4fe, #67e8f9)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent"
+                  }}>
                     {token.name}
                   </h3>
-                  <button
-                    onClick={function(e) { e.stopPropagation(); removeToken(token.id); }}
-                    className="text-red-400 hover:text-red-300"
-                  >
+                  <button onClick={function(e) { e.stopPropagation(); removeToken(token.id); }} style={{ color: "#f87171", background: "none", border: "none", cursor: "pointer" }}>
                     <X size={14} />
                   </button>
                 </div>
-                <p className="text-xs text-gray-400 font-mono mb-3 truncate">{token.address}</p>
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-400 flex items-center gap-1">
-                      <Flame size={12} className="text-orange-400" />
+                <p style={{ fontSize: "0.75rem", color: "#9ca3af", fontFamily: "monospace", marginBottom: "0.75rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {token.address}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", fontSize: "0.875rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <span style={{ color: "#9ca3af", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                      <Flame size={12} style={{ color: "#fb923c" }} />
                       Viral
                     </span>
-                    <span className="font-bold text-orange-400">{token.viralScore}/100</span>
+                    <span style={{ fontWeight: "700", color: "#fb923c" }}>{token.viralScore}/100</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400 flex items-center gap-1">
-                      <Shield size={12} className="text-green-400" />
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <span style={{ color: "#9ca3af", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                      <Shield size={12} style={{ color: "#4ade80" }} />
                       Loyalty
                     </span>
-                    <span className="font-bold text-green-400">{token.loyaltyIndex}%</span>
+                    <span style={{ fontWeight: "700", color: "#4ade80" }}>{token.loyaltyIndex}%</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400 flex items-center gap-1">
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <span style={{ color: "#9ca3af", display: "flex", alignItems: "center", gap: "0.25rem" }}>
                       <Heart size={12} />
                       Likes
                     </span>
-                    <span className="font-bold text-pink-400">{(token.totalLikes / 1000).toFixed(1)}K</span>
+                    <span style={{ fontWeight: "700", color: "#f472b6" }}>{(token.totalLikes / 1000).toFixed(1)}K</span>
                   </div>
                 </div>
                 <button
                   onClick={function(e) { e.stopPropagation(); refreshData(token.id); }}
-                  className="mt-3 w-full py-1 bg-purple-600 bg-opacity-50 hover:bg-purple-600 rounded-lg text-sm font-bold"
+                  style={{
+                    marginTop: "0.75rem",
+                    width: "100%",
+                    padding: "0.25rem",
+                    background: "rgba(124, 58, 237, 0.5)",
+                    borderRadius: "0.5rem",
+                    fontSize: "0.875rem",
+                    fontWeight: "700",
+                    border: "none",
+                    cursor: "pointer",
+                    color: "white"
+                  }}
                 >
                   Refresh
                 </button>
@@ -268,48 +324,63 @@ function SolanaTokenTracker() {
         </div>
 
         {selectedToken && (
-          <div className="p-4 md:p-5 bg-purple-900 bg-opacity-40 border-2 border-purple-500 border-opacity-40 rounded-2xl">
-            <div className="flex justify-between mb-4">
+          <div style={{
+            padding: "1.25rem",
+            background: "rgba(88, 28, 135, 0.4)",
+            border: "2px solid rgba(168, 85, 247, 0.4)",
+            borderRadius: "1.5rem"
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
               <div>
-                <h2 className="text-2xl md:text-3xl font-black bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                <h2 style={{
+                  fontSize: "1.875rem",
+                  fontWeight: "900",
+                  background: "linear-gradient(to right, #d8b4fe, #67e8f9)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent"
+                }}>
                   {selectedToken.name}
                 </h2>
-                <p className="text-xs text-gray-400 font-mono mb-2 break-all">{selectedToken.address}</p>
-                <div className="flex gap-2 text-xs flex-wrap">
-                  <span className="px-2 py-1 bg-purple-500 bg-opacity-20 border border-purple-500 border-opacity-40 rounded">
+                <p style={{ fontSize: "0.75rem", color: "#9ca3af", fontFamily: "monospace", marginBottom: "0.5rem", wordBreak: "break-all" }}>
+                  {selectedToken.address}
+                </p>
+                <div style={{ display: "flex", gap: "0.5rem", fontSize: "0.75rem", flexWrap: "wrap" }}>
+                  <span style={{ padding: "0.25rem 0.5rem", background: "rgba(168, 85, 247, 0.2)", border: "1px solid rgba(168, 85, 247, 0.4)", borderRadius: "0.25rem" }}>
                     MCap: ${(selectedToken.marketCap / 1e6).toFixed(1)}M
                   </span>
-                  <span className="px-2 py-1 bg-cyan-500 bg-opacity-20 border border-cyan-500 border-opacity-40 rounded">
+                  <span style={{ padding: "0.25rem 0.5rem", background: "rgba(6, 182, 212, 0.2)", border: "1px solid rgba(6, 182, 212, 0.4)", borderRadius: "0.25rem" }}>
                     Vol: ${(selectedToken.volume24h / 1e6).toFixed(1)}M
                   </span>
-                  <span className="px-2 py-1 bg-green-500 bg-opacity-20 border border-green-500 border-opacity-40 rounded">
+                  <span style={{ padding: "0.25rem 0.5rem", background: "rgba(16, 185, 129, 0.2)", border: "1px solid rgba(16, 185, 129, 0.4)", borderRadius: "0.25rem" }}>
                     +{selectedToken.weeklyGrowth}%
                   </span>
                 </div>
               </div>
-              <button
-                onClick={function() { setSelectedToken(null); }}
-                className="text-gray-400 hover:text-white"
-              >
+              <button onClick={function() { setSelectedToken(null); }} style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer" }}>
                 <X size={24} />
               </button>
             </div>
 
-            <div className="flex gap-2 mb-4 overflow-x-auto">
+            <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem", overflowX: "auto" }}>
               {[
-                { id: "overview", label: "Overview", colors: "from-purple-600 to-pink-600" },
-                { id: "community", label: "Community", colors: "from-green-600 to-emerald-600" },
-                { id: "competition", label: "Competition", colors: "from-orange-600 to-red-600" },
-                { id: "alerts", label: "Alerts", colors: "from-yellow-600 to-orange-600" }
+                { id: "overview", label: "Overview", bg: "linear-gradient(to right, #7c3aed, #db2777)" },
+                { id: "competition", label: "Competition", bg: "linear-gradient(to right, #ea580c, #dc2626)" },
+                { id: "alerts", label: "Alerts", bg: "linear-gradient(to right, #ca8a04, #ea580c)" }
               ].map(function(tab) {
                 return (
                   <button
                     key={tab.id}
                     onClick={function() { setActiveTab(tab.id); }}
-                    className={
-                      "px-4 py-2 rounded-lg font-semibold whitespace-nowrap " +
-                      (activeTab === tab.id ? "bg-gradient-to-r " + tab.colors : "bg-black bg-opacity-30 text-gray-400")
-                    }
+                    style={{
+                      padding: "0.5rem 1rem",
+                      borderRadius: "0.5rem",
+                      fontWeight: "600",
+                      whiteSpace: "nowrap",
+                      background: activeTab === tab.id ? tab.bg : "rgba(0, 0, 0, 0.3)",
+                      border: "none",
+                      cursor: "pointer",
+                      color: activeTab === tab.id ? "white" : "#9ca3af"
+                    }}
                   >
                     {tab.label}
                   </button>
@@ -318,8 +389,8 @@ function SolanaTokenTracker() {
             </div>
 
             {activeTab === "overview" && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
                   {[
                     { icon: Twitter, label: "Posts", value: selectedToken.totalPosts.toLocaleString() },
                     { icon: Heart, label: "Likes", value: selectedToken.totalLikes.toLocaleString() },
@@ -327,18 +398,18 @@ function SolanaTokenTracker() {
                     { icon: Clock, label: "Per Hour", value: selectedToken.postsPerHour }
                   ].map(function(item, i) {
                     return (
-                      <div key={i} className="p-3 bg-black bg-opacity-40 border border-gray-700 rounded-xl">
-                        <item.icon size={18} className="mb-1 text-blue-400" />
-                        <p className="text-xs text-gray-400">{item.label}</p>
-                        <p className="text-xl md:text-2xl font-black">{item.value}</p>
+                      <div key={i} style={{ padding: "0.75rem", background: "rgba(0, 0, 0, 0.4)", border: "1px solid #374151", borderRadius: "0.75rem" }}>
+                        <item.icon size={18} style={{ marginBottom: "0.25rem", color: "#60a5fa" }} />
+                        <p style={{ fontSize: "0.75rem", color: "#9ca3af" }}>{item.label}</p>
+                        <p style={{ fontSize: "1.5rem", fontWeight: "900" }}>{item.value}</p>
                       </div>
                     );
                   })}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="bg-black bg-opacity-40 p-3 rounded-xl border border-purple-500 border-opacity-30">
-                    <h3 className="font-bold mb-2 text-purple-300 text-sm">Weekly Activity</h3>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "0.75rem" }}>
+                  <div style={{ background: "rgba(0, 0, 0, 0.4)", padding: "0.75rem", borderRadius: "0.75rem", border: "1px solid rgba(139, 92, 246, 0.3)" }}>
+                    <h3 style={{ fontWeight: "700", marginBottom: "0.5rem", color: "#c084fc", fontSize: "0.875rem" }}>Weekly Activity</h3>
                     <ResponsiveContainer width="100%" height={180}>
                       <AreaChart data={selectedToken.mindshareData}>
                         <defs>
@@ -347,37 +418,23 @@ function SolanaTokenTracker() {
                             <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                         <XAxis dataKey="day" stroke="#a78bfa" style={{ fontSize: "10px" }} />
                         <YAxis stroke="#a78bfa" style={{ fontSize: "10px" }} />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "#000",
-                            border: "2px solid #8b5cf6",
-                            borderRadius: "8px",
-                            fontSize: "11px"
-                          }}
-                        />
+                        <Tooltip contentStyle={{ backgroundColor: "#000", border: "2px solid #8b5cf6", borderRadius: "8px" }} />
                         <Area type="monotone" dataKey="posts" stroke="#8b5cf6" strokeWidth={2} fill="url(#cP)" />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
 
-                  <div className="bg-black bg-opacity-40 p-3 rounded-xl border border-cyan-500 border-opacity-30">
-                    <h3 className="font-bold mb-2 text-cyan-300 text-sm">24h Hourly Posts</h3>
+                  <div style={{ background: "rgba(0, 0, 0, 0.4)", padding: "0.75rem", borderRadius: "0.75rem", border: "1px solid rgba(6, 182, 212, 0.3)" }}>
+                    <h3 style={{ fontWeight: "700", marginBottom: "0.5rem", color: "#22d3ee", fontSize: "0.875rem" }}>24h Hourly Posts</h3>
                     <ResponsiveContainer width="100%" height={180}>
                       <BarChart data={selectedToken.hourlyData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                         <XAxis dataKey="hour" stroke="#22d3ee" style={{ fontSize: "8px" }} interval={3} />
                         <YAxis stroke="#22d3ee" style={{ fontSize: "10px" }} />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "#000",
-                            border: "2px solid #06b6d4",
-                            borderRadius: "8px",
-                            fontSize: "11px"
-                          }}
-                        />
+                        <Tooltip contentStyle={{ backgroundColor: "#000", border: "2px solid #06b6d4", borderRadius: "8px" }} />
                         <Bar dataKey="posts" fill="#06b6d4" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
@@ -386,36 +443,33 @@ function SolanaTokenTracker() {
               </div>
             )}
 
-            {activeTab === "community" && (
-              <div className="text-center py-8 text-gray-400">Community analytics coming soon...</div>
-            )}
-
             {activeTab === "competition" && (
-              <div className="space-y-3">
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 {selectedToken.competitors.map(function(comp, i) {
                   return (
                     <div
                       key={i}
-                      className={
-                        comp.name === selectedToken.name
-                          ? "p-3 rounded-lg border bg-purple-500 bg-opacity-20 border-purple-500 border-opacity-40"
-                          : "p-3 rounded-lg border bg-black bg-opacity-30 border-gray-700"
-                      }
+                      style={{
+                        padding: "0.75rem",
+                        borderRadius: "0.5rem",
+                        border: "1px solid " + (comp.name === selectedToken.name ? "rgba(168, 85, 247, 0.4)" : "#374151"),
+                        background: comp.name === selectedToken.name ? "rgba(168, 85, 247, 0.2)" : "rgba(0, 0, 0, 0.3)"
+                      }}
                     >
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-bold text-lg">{comp.name}</span>
-                        <span className={comp.growth >= 0 ? "font-bold text-green-400" : "font-bold text-red-400"}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                        <span style={{ fontWeight: "700", fontSize: "1.125rem" }}>{comp.name}</span>
+                        <span style={{ fontWeight: "700", color: comp.growth >= 0 ? "#4ade80" : "#f87171" }}>
                           {comp.growth >= 0 ? "↗" : "↘"} {comp.growth}%
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem", fontSize: "0.875rem" }}>
                         <div>
-                          <span className="text-gray-400">Mentions: </span>
-                          <span className="font-semibold">{comp.mentions.toLocaleString()}</span>
+                          <span style={{ color: "#9ca3af" }}>Mentions: </span>
+                          <span style={{ fontWeight: "600" }}>{comp.mentions.toLocaleString()}</span>
                         </div>
                         <div>
-                          <span className="text-gray-400">Sentiment: </span>
-                          <span className="font-semibold text-blue-400">{comp.sentiment}%</span>
+                          <span style={{ color: "#9ca3af" }}>Sentiment: </span>
+                          <span style={{ fontWeight: "600", color: "#60a5fa" }}>{comp.sentiment}%</span>
                         </div>
                       </div>
                     </div>
@@ -425,25 +479,26 @@ function SolanaTokenTracker() {
             )}
 
             {activeTab === "alerts" && (
-              <div className="space-y-3">
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 {selectedToken.alerts.map(function(alert) {
                   return (
                     <div
                       key={alert.id}
-                      className={
-                        alert.severity === "high"
-                          ? "p-4 rounded-xl border-2 bg-red-500 bg-opacity-10 border-red-500 border-opacity-40"
-                          : "p-4 rounded-xl border-2 bg-yellow-500 bg-opacity-10 border-yellow-500 border-opacity-40"
-                      }
+                      style={{
+                        padding: "1rem",
+                        borderRadius: "0.75rem",
+                        border: "2px solid " + (alert.severity === "high" ? "rgba(239, 68, 68, 0.4)" : "rgba(234, 179, 8, 0.4)"),
+                        background: alert.severity === "high" ? "rgba(239, 68, 68, 0.1)" : "rgba(234, 179, 8, 0.1)"
+                      }}
                     >
-                      <div className="flex items-start gap-3">
-                        <Bell className={alert.severity === "high" ? "text-red-400" : "text-yellow-400"} size={20} />
-                        <div className="flex-1">
-                          <div className="flex justify-between items-start mb-1">
-                            <h4 className="font-bold">{alert.title}</h4>
-                            <span className="text-xs text-gray-400">{alert.time}</span>
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                        <Bell size={20} style={{ color: alert.severity === "high" ? "#f87171" : "#fbbf24" }} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.25rem" }}>
+                            <h4 style={{ fontWeight: "700" }}>{alert.title}</h4>
+                            <span style={{ fontSize: "0.75rem", color: "#9ca3af" }}>{alert.time}</span>
                           </div>
-                          <p className="text-sm text-gray-300">{alert.message}</p>
+                          <p style={{ fontSize: "0.875rem", color: "#d1d5db" }}>{alert.message}</p>
                         </div>
                       </div>
                     </div>
