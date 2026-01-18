@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   margin: 0;
   padding: 0;
@@ -11,27 +15,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(to bottom right, #581c87, #000000, #164e63);
-  min-height: 100vh;
 }
 
 #root {
   min-height: 100vh;
-}
-
-input {
-  font-family: inherit;
-}
-
-button {
-  font-family: inherit;
-  cursor: pointer;
-}
-
-input::placeholder {
-  color: #9ca3af;
-}
-
-input:focus {
-  outline: none;
 }
